@@ -17,6 +17,10 @@ export default auth((req) => {
     '/api/auth/register',
     '/api/auth/logout',
     '/api/auth/signout',
+    '/api/auth/forgot-password',
+    '/api/auth/reset-password',
+    '/reset-password',
+    '/reset-password-required',
   ];
 
   // Check if current path is public
@@ -30,6 +34,11 @@ export default auth((req) => {
   // Redirect unauthenticated users to login
   if (!session) {
     return Response.redirect(new URL('/login', req.url));
+  }
+
+  // Force password reset on first login
+  if (session.user?.mustResetPassword && pathname !== '/reset-password-required') {
+    return Response.redirect(new URL('/reset-password-required', req.url));
   }
 
   // Protect /admin routes - only SUPER_ADMIN can access
