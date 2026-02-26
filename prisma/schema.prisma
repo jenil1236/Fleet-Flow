@@ -1,0 +1,235 @@
+// ================================
+// Prisma Schema for FleetFlow SaaS
+// Multi-Tenant + RBAC + Fleet Ops
+// ================================
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+///////////////////////////////////////////////////////
+// ENUMS
+///////////////////////////////////////////////////////
+
+/// System roles for RBAC (User.role)
+enum Role {
+  SUPER_ADMIN        // Platform owner (no organization)
+  FLEET_MANAGER      // Organization admin
+  DISPATCHER         // Manages trips
+  FINANCIAL_ANALYST  // Views financial reports
+  SAFETY_OFFICER     // Monitors drivers
+  DRIVER             // Executes trips
+}
+
+/// Vehicle operational status (Vehicle.status)
+enum VehicleStatus {
+  AVAILABLE      // Ready for dispatch
+  ON_TRIP        // Currently assigned
+  IN_SHOP        // Under maintenance (auto-set via MaintenanceLog)
+  OUT_OF_SERVICE // Retired manually
+}
+
+/// Trip lifecycle tracking (Trip.status)
+enum TripStatus {
+  DRAFT
+  DISPATCHED
+  COMPLETED
+  CANCELLED
+}
+
+/// Maintenance workflow tracking (MaintenanceLog.status)
+enum MaintenanceStatus {
+  OPEN
+  IN_PROGRESS
+  CLOSED
+}
+
+/// Driver availability & HR state (DriverProfile.dutyStatus)
+enum DriverDutyStatus {
+  ON_DUTY
+  OFF_DUTY
+  SUSPENDED
+}
+
+/// Expense record state (Expense.status)
+enum ExpenseStatus {
+  RECORDED
+  APPROVED
+}
+
+///////////////////////////////////////////////////////
+// ORGANIZATION (Tenant Layer)
+// Every business account owns its fleet data
+///////////////////////////////////////////////////////
+
+model Organization {
+  id        String   @id @default(cuid())
+  name      String
+  createdAt DateTime @default(now())
+
+  users           User[]
+  vehicles        Vehicle[]
+  driverProfiles  DriverProfile[]
+  trips           Trip[]
+  maintenanceLogs MaintenanceLog[]
+  expenses        Expense[]
+}
+
+///////////////////////////////////////////////////////
+// USER (Authentication + RBAC Layer)
+// All system actors authenticate via this model
+///////////////////////////////////////////////////////
+
+model User {
+  id             String   @id @default(cuid())
+  name           String
+  email          String   @unique
+  password       String
+  role           Role
+  createdAt      DateTime @default(now())
+
+  // Multi-tenant link (null only for SUPER_ADMIN)
+  organizationId String?
+  organization   Organization? @relation(fields: [organizationId], references: [id])
+
+  // DriverProfile exists only if role == DRIVER
+  driverProfile  DriverProfile?
+}
+
+///////////////////////////////////////////////////////
+// DRIVER PROFILE
+// Extends User for driver-specific compliance + performance
+// Depends on: User, Organization
+///////////////////////////////////////////////////////
+
+model DriverProfile {
+  id               String           @id @default(cuid())
+  userId           String           @unique
+  organizationId   String
+
+  licenseNumber    String
+  licenseExpiry    DateTime
+  safetyScore      Float            @default(0)
+  completionRate   Float            @default(0)
+  complaintCount   Int              @default(0)
+  dutyStatus       DriverDutyStatus @default(OFF_DUTY)
+
+  createdAt        DateTime @default(now())
+
+  user             User         @relation(fields: [userId], references: [id])
+  organization     Organization @relation(fields: [organizationId], references: [id])
+  trips            Trip[]
+  expenses         Expense[]
+}
+
+///////////////////////////////////////////////////////
+// VEHICLE (Asset Registry)
+// Depends on: Organization
+///////////////////////////////////////////////////////
+
+model Vehicle {
+  id               String        @id @default(cuid())
+  organizationId   String
+
+  licensePlate     String        @unique   // Unique vehicle identifier
+  model            String        // Vehicle model name
+  type             String        // Category (Truck, Van, Bike, etc.)
+  maxCapacityKg    Int           // Max load capacity in kilograms
+  odometerKm       Int           // Current odometer reading
+  status           VehicleStatus @default(AVAILABLE)
+  acquisitionCost  Decimal       @db.Decimal(12,2)
+
+  createdAt        DateTime @default(now())
+
+  organization     Organization   @relation(fields: [organizationId], references: [id])
+  trips            Trip[]
+  maintenanceLogs  MaintenanceLog[]
+  expenses         Expense[]
+}
+
+///////////////////////////////////////////////////////
+// TRIP (Dispatcher Core Logic)
+// Depends on: Organization, Vehicle, DriverProfile
+///////////////////////////////////////////////////////
+
+model Trip {
+  id               String      @id @default(cuid())
+  organizationId   String
+  vehicleId        String
+  driverId         String      // DriverProfile.id
+
+  cargoWeightKg    Int
+  originAddress    String
+  destinationAddress String
+  estimatedFuelCost Decimal    @db.Decimal(12,2)
+
+  startOdometerKm  Int
+  endOdometerKm    Int?
+  distanceKm       Int?
+
+  revenue          Decimal     @db.Decimal(12,2)
+  status           TripStatus  @default(DRAFT)
+
+  createdAt        DateTime @default(now())
+  completedAt      DateTime?
+
+  organization     Organization  @relation(fields: [organizationId], references: [id])
+  vehicle          Vehicle       @relation(fields: [vehicleId], references: [id])
+  driver           DriverProfile @relation(fields: [driverId], references: [id])
+  expenses         Expense[]
+}
+
+///////////////////////////////////////////////////////
+// MAINTENANCE LOG
+// Auto-sets vehicle status to IN_SHOP at app logic level
+// Depends on: Organization, Vehicle
+///////////////////////////////////////////////////////
+
+model MaintenanceLog {
+  id               String            @id @default(cuid())
+  organizationId   String
+  vehicleId        String
+
+  issueDescription String
+  serviceDate      DateTime
+  cost             Decimal           @db.Decimal(12,2)
+  status           MaintenanceStatus @default(OPEN)
+
+  createdAt        DateTime @default(now())
+
+  organization     Organization @relation(fields: [organizationId], references: [id])
+  vehicle          Vehicle      @relation(fields: [vehicleId], references: [id])
+}
+
+///////////////////////////////////////////////////////
+// EXPENSE (Fuel + Misc Per Trip / Vehicle)
+// Acts as financial ledger
+// Depends on: Organization, Vehicle, DriverProfile, Trip
+///////////////////////////////////////////////////////
+
+model Expense {
+  id               String        @id @default(cuid())
+  organizationId   String
+  vehicleId        String
+  driverId         String
+  tripId           String?
+
+  fuelLiters       Decimal       @db.Decimal(10,2)
+  fuelCost         Decimal       @db.Decimal(12,2)
+  miscCost         Decimal       @db.Decimal(12,2)
+  totalCost        Decimal       @db.Decimal(12,2)
+
+  expenseDate      DateTime
+  status           ExpenseStatus @default(RECORDED)
+
+  createdAt        DateTime @default(now())
+
+  organization     Organization  @relation(fields: [organizationId], references: [id])
+  vehicle          Vehicle       @relation(fields: [vehicleId], references: [id])
+  driver           DriverProfile @relation(fields: [driverId], references: [id])
+  trip             Trip?         @relation(fields: [tripId], references: [id])
+}
