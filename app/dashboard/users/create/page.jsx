@@ -62,7 +62,7 @@ export default function CreateUserPage() {
             User Created Successfully!
           </h2>
           <p className="text-gray-600 dark:text-gray-400 mb-4">
-            Credentials have been sent to the user's email address.
+            Credentials have been sent to the user&apos;s email address.
           </p>
           <p className="text-sm text-gray-500 dark:text-gray-500">
             Redirecting to users list...
