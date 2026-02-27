@@ -8,6 +8,7 @@ export default auth((req) => {
 
   // Public routes that don't require authentication
   const publicRoutes = [
+    '/',
     '/login',
     '/register',
     '/forgot-password',
@@ -28,7 +29,7 @@ export default auth((req) => {
   ];
 
   // Auth pages that should redirect to dashboard if already logged in
-  const authPages = ['/login', '/register', '/forgot-password','/reset-password', '/landing', '/'];
+  const authPages = ['/login', '/register', '/forgot-password', '/reset-password'];
 
   // Check if current path is public
   const isPublicRoute = publicRoutes.some((route) => pathname.startsWith(route));
@@ -50,6 +51,24 @@ export default auth((req) => {
     }
     return Response.redirect(new URL('/dashboard', req.url));
   }
+
+  // // Redirect authenticated users from root/landing to their dashboard
+  // if (session && (pathname === '/' || pathname === '/landing')) {
+  //   // Redirect based on role
+  //   if (session.user.role === 'SAFETY_OFFICER') {
+  //     return Response.redirect(new URL('/dashboard-safety', req.url));
+  //   }
+  //   if (session.user.role === 'DISPATCHER') {
+  //     return Response.redirect(new URL('/dashboard-dispatcher', req.url));
+  //   }
+  //   if (session.user.role === 'DRIVER') {
+  //     return Response.redirect(new URL('/dashboard-driver', req.url));
+  //   }
+  //   if (session.user.role === 'FINANCIAL_ANALYST') {
+  //     return Response.redirect(new URL('/dashboard-financial', req.url));
+  //   }
+  //   return Response.redirect(new URL('/dashboard', req.url));
+  // }
 
   // Allow access to public routes
   if (isPublicRoute) {
