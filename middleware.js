@@ -28,11 +28,21 @@ export default auth((req) => {
     '/reset-password-required',
   ];
 
+  // Shared routes accessible by all authenticated users (regardless of role)
+  const sharedRoutes = [
+    '/dashboard/profile',
+    '/dashboard-dispatcher/profile',
+    '/dashboard-driver/profile',
+    '/dashboard-safety/profile',
+    '/dashboard-financial/profile',
+  ];
+
   // Auth pages that should redirect to dashboard if already logged in
   const authPages = ['/login', '/register', '/forgot-password', '/reset-password'];
 
-  // Check if current path is public
+  // Check if current path is public or shared
   const isPublicRoute = publicRoutes.some((route) => pathname.startsWith(route));
+  const isSharedRoute = sharedRoutes.some((route) => pathname === route);
 
   // Redirect authenticated users away from auth pages to dashboard
   if (session && authPages.includes(pathname)) {
@@ -72,6 +82,11 @@ export default auth((req) => {
 
   // Allow access to public routes
   if (isPublicRoute) {
+    return;
+  }
+
+  // Allow access to shared routes for authenticated users
+  if (isSharedRoute && session) {
     return;
   }
 

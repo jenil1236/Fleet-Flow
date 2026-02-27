@@ -87,6 +87,9 @@ export default function DriverVehiclePage() {
     OUT_OF_SERVICE: 'bg-red-100 dark:bg-red-900/30 text-red-800 dark:text-red-300',
   };
 
+  const vehicleStatus = vehicle.status || 'AVAILABLE';
+  const statusDisplay = vehicleStatus.replace(/_/g, ' ');
+
   return (
     <div className="space-y-6">
       <div>
@@ -102,12 +105,12 @@ export default function DriverVehiclePage() {
         <div className="flex items-center gap-3 mb-4">
           <Truck className="w-8 h-8" />
           <div>
-            <h2 className="text-2xl font-bold">{vehicle.licensePlate}</h2>
-            <p className="text-blue-100">{vehicle.model}</p>
+            <h2 className="text-2xl font-bold">{vehicle.licensePlate || 'N/A'}</h2>
+            <p className="text-blue-100">{vehicle.model || 'N/A'}</p>
           </div>
         </div>
-        <span className={`inline-block px-3 py-1 rounded-full text-sm font-medium ${statusColors[vehicle.status]}`}>
-          {vehicle.status.replace(/_/g, ' ')}
+        <span className={`inline-block px-3 py-1 rounded-full text-sm font-medium ${statusColors[vehicleStatus]}`}>
+          {statusDisplay}
         </span>
       </div>
 
@@ -118,27 +121,27 @@ export default function DriverVehiclePage() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div>
             <p className="text-sm text-gray-500 dark:text-gray-400 mb-1">License Plate</p>
-            <p className="text-lg font-semibold text-gray-900 dark:text-white">{vehicle.licensePlate}</p>
+            <p className="text-lg font-semibold text-gray-900 dark:text-white">{vehicle.licensePlate || 'N/A'}</p>
           </div>
           <div>
             <p className="text-sm text-gray-500 dark:text-gray-400 mb-1">Model</p>
-            <p className="text-lg font-semibold text-gray-900 dark:text-white">{vehicle.model}</p>
+            <p className="text-lg font-semibold text-gray-900 dark:text-white">{vehicle.model || 'N/A'}</p>
           </div>
           <div>
             <p className="text-sm text-gray-500 dark:text-gray-400 mb-1">Type</p>
-            <p className="text-lg font-semibold text-gray-900 dark:text-white">{vehicle.type}</p>
+            <p className="text-lg font-semibold text-gray-900 dark:text-white">{vehicle.type || 'N/A'}</p>
           </div>
           <div>
             <p className="text-sm text-gray-500 dark:text-gray-400 mb-1">Max Capacity</p>
-            <p className="text-lg font-semibold text-gray-900 dark:text-white">{vehicle.maxCapacityKg} kg</p>
+            <p className="text-lg font-semibold text-gray-900 dark:text-white">{vehicle.maxCapacityKg ? `${vehicle.maxCapacityKg} kg` : 'N/A'}</p>
           </div>
           <div>
             <p className="text-sm text-gray-500 dark:text-gray-400 mb-1">Current Odometer</p>
-            <p className="text-lg font-semibold text-gray-900 dark:text-white">{vehicle.odometerKm.toLocaleString()} km</p>
+            <p className="text-lg font-semibold text-gray-900 dark:text-white">{vehicle.odometerKm ? `${vehicle.odometerKm.toLocaleString()} km` : 'N/A'}</p>
           </div>
           <div>
             <p className="text-sm text-gray-500 dark:text-gray-400 mb-1">Status</p>
-            <p className="text-lg font-semibold text-gray-900 dark:text-white">{vehicle.status.replace(/_/g, ' ')}</p>
+            <p className="text-lg font-semibold text-gray-900 dark:text-white">{statusDisplay}</p>
           </div>
         </div>
       </div>

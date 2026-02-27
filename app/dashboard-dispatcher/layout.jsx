@@ -12,7 +12,7 @@ const dispatcherMenu = [
   { icon: 'Users', label: 'Drivers', href: '/dashboard-dispatcher/drivers' },
   { icon: 'Wrench', label: 'Maintenance', href: '/dashboard-dispatcher/maintenance' },
   { icon: 'AlertTriangle', label: 'Driver Issues', href: '/dashboard-dispatcher/complaints' },
-  { icon: 'User', label: 'Profile', href: '/dashboard/profile' },
+  { icon: 'User', label: 'Profile', href: '/dashboard-dispatcher/profile' },
 ];
 
 export default function DispatcherLayout({ children }) {

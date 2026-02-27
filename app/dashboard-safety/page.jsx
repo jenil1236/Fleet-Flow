@@ -10,24 +10,44 @@ export default function SafetyOfficerDashboard() {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    fetch('/api/analytics/dashboard')
-      .then(res => {
-        if (!res.ok) throw new Error('Failed to fetch dashboard data');
-        return res.json();
-      })
-      .then(data => {
-        if (data.success) {
-          setStats(data.data);
-        } else {
-          throw new Error(data.error || 'Failed to load data');
-        }
-        setLoading(false);
-      })
-      .catch((err) => {
-        setError(err.message);
-        setLoading(false);
-      });
+    fetchSafetyData();
   }, []);
+
+  const fetchSafetyData = async () => {
+    try {
+      const [vehiclesRes, maintenanceRes, complaintsRes] = await Promise.all([
+        fetch('/api/vehicles/list'),
+        fetch('/api/maintenance/list'),
+        fetch('/api/complaints/list'),
+      ]);
+
+      const vehiclesData = await vehiclesRes.json();
+      const maintenanceData = await maintenanceRes.json();
+      const complaintsData = await complaintsRes.json();
+
+      if (!vehiclesData.success || !maintenanceData.success || !complaintsData.success) {
+        throw new Error('Failed to fetch safety data');
+      }
+
+      // Calculate safety-specific stats
+      const activeFleet = vehiclesData.data?.filter(v => v.status === 'ON_TRIP').length || 0;
+      const maintenanceAlerts = vehiclesData.data?.filter(v => v.status === 'IN_SHOP').length || 0;
+      const openComplaints = complaintsData.data?.filter(c => c.status === 'OPEN').length || 0;
+      const pendingMaintenance = maintenanceData.data?.filter(m => m.status === 'PENDING').length || 0;
+
+      setStats({
+        activeFleet,
+        maintenanceAlerts,
+        openComplaints,
+        pendingMaintenance,
+      });
+
+      setLoading(false);
+    } catch (err) {
+      setError(err.message);
+      setLoading(false);
+    }
+  };
 
   if (loading) {
     return (
@@ -42,7 +62,7 @@ export default function SafetyOfficerDashboard() {
       <div className="flex flex-col items-center justify-center h-64">
         <div className="text-red-600 dark:text-red-400 mb-4">Error: {error}</div>
         <button
-          onClick={() => window.location.reload()}
+          onClick={fetchSafetyData}
           className="px-4 py-2 bg-blue-600 text-white rounded-xl hover:bg-blue-700"
         >
           Retry
@@ -84,16 +104,16 @@ export default function SafetyOfficerDashboard() {
           color="red"
         />
         <StatsCard
-          title="Utilization Rate"
-          value={`${stats.utilizationRate}%`}
-          icon={Activity}
-          color="green"
-        />
-        <StatsCard
-          title="Pending Cargo"
-          value={stats.pendingCargo}
+          title="Open Complaints"
+          value={stats.openComplaints}
           icon={AlertTriangle}
           color="orange"
+        />
+        <StatsCard
+          title="Pending Maintenance"
+          value={stats.pendingMaintenance}
+          icon={Activity}
+          color="purple"
         />
       </div>
 
@@ -109,9 +129,21 @@ export default function SafetyOfficerDashboard() {
             </p>
           </div>
           <div>
-            <p className="text-sm text-gray-600 dark:text-gray-400 mb-2">Operational Vehicles</p>
+            <p className="text-sm text-gray-600 dark:text-gray-400 mb-2">Active Vehicles</p>
             <p className="text-3xl font-bold text-green-600 dark:text-green-400">
               {stats.activeFleet}
+            </p>
+          </div>
+          <div>
+            <p className="text-sm text-gray-600 dark:text-gray-400 mb-2">Open Complaints</p>
+            <p className="text-3xl font-bold text-red-600 dark:text-red-400">
+              {stats.openComplaints}
+            </p>
+          </div>
+          <div>
+            <p className="text-sm text-gray-600 dark:text-gray-400 mb-2">Pending Maintenance</p>
+            <p className="text-3xl font-bold text-blue-600 dark:text-blue-400">
+              {stats.pendingMaintenance}
             </p>
           </div>
         </div>

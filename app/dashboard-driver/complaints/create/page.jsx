@@ -28,14 +28,19 @@ export default function CreateComplaintPage() {
     try {
       const [vehiclesRes, tripsRes] = await Promise.all([
         fetch('/api/vehicles/list'),
-        fetch('/api/driver/trips'),
+        fetch('/api/trips/list'),
       ]);
 
-      const vehiclesData = await vehiclesRes.json();
-      const tripsData = await tripsRes.json();
+      // Check if responses are OK before parsing JSON
+      if (vehiclesRes.ok) {
+        const vehiclesData = await vehiclesRes.json();
+        if (vehiclesData.success) setVehicles(vehiclesData.data || []);
+      }
 
-      if (vehiclesData.success) setVehicles(vehiclesData.data);
-      if (tripsData.success) setTrips(tripsData.data);
+      if (tripsRes.ok) {
+        const tripsData = await tripsRes.json();
+        if (tripsData.success) setTrips(tripsData.data || []);
+      }
       
       setLoadingData(false);
     } catch (err) {

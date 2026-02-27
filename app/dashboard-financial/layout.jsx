@@ -9,9 +9,9 @@ const financialMenu = [
   { icon: 'LayoutDashboard', label: 'Dashboard', href: '/dashboard-financial' },
   { icon: 'DollarSign', label: 'Expenses', href: '/dashboard-financial/expenses' },
   { icon: 'TrendingUp', label: 'Revenue', href: '/dashboard-financial/revenue' },
-  { icon: 'BarChart3', label: 'Trip Analysis', href: '/dashboard-financial/trip-analysis' },
+//   { icon: 'BarChart3', label: 'Trip Analysis', href: '/dashboard-financial/trip-analysis' },
   { icon: 'Truck', label: 'Fleet Summary', href: '/dashboard-financial/fleet-summary' },
-  { icon: 'User', label: 'Profile', href: '/dashboard/profile' },
+  { icon: 'User', label: 'Profile', href: '/dashboard-financial/profile' },
 ];
 
 export default function FinancialLayout({ children }) {

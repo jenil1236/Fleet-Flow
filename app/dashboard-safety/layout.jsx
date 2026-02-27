@@ -9,10 +9,10 @@ const safetyOfficerMenu = [
   { icon: 'LayoutDashboard', label: 'Dashboard', href: '/dashboard-safety' },
   { icon: 'Truck', label: 'Vehicles', href: '/dashboard-safety/vehicles' },
   { icon: 'Wrench', label: 'Maintenance', href: '/dashboard-safety/maintenance' },
-  { icon: 'DollarSign', label: 'Expenses', href: '/dashboard-safety/expenses' },
-  { icon: 'BarChart3', label: 'Analytics', href: '/dashboard-safety/analytics' },
+  // { icon: 'DollarSign', label: 'Expenses', href: '/dashboard-safety/expenses' },
+  // { icon: 'BarChart3', label: 'Analytics', href: '/dashboard-safety/analytics' },
   { icon: 'AlertTriangle', label: 'Driver Issues', href: '/dashboard-safety/complaints' },
-  { icon: 'User', label: 'Profile', href: '/dashboard/profile' },
+  { icon: 'User', label: 'Profile', href: '/dashboard-safety/profile' },
 ];
 
 export default function SafetyOfficerLayout({ children }) {

@@ -44,7 +44,22 @@ export default function LoginPage() {
       }
 
       toast('Login successful! Welcome back.', 'success');
-      window.location.href = '/dashboard';
+      
+      // Redirect based on user role
+      const userRole = result.user?.role;
+      let redirectUrl = '/dashboard'; // default
+      
+      if (userRole === 'DISPATCHER') {
+        redirectUrl = '/dashboard-dispatcher';
+      } else if (userRole === 'DRIVER') {
+        redirectUrl = '/dashboard-driver';
+      } else if (userRole === 'SAFETY_OFFICER') {
+        redirectUrl = '/dashboard-safety';
+      } else if (userRole === 'FINANCIAL_ANALYST') {
+        redirectUrl = '/dashboard-financial';
+      }
+      
+      window.location.href = redirectUrl;
       
     } catch (error) {
       console.error('Login error:', error);

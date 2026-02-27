@@ -40,7 +40,7 @@ export default function DashboardNavbar({ user, onMenuClick }) {
                 </p>
                 <p className="text-xs text-gray-500 dark:text-gray-400">
                   <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-300">
-                    Fleet Manager
+                    {user?.role}
                   </span>
                 </p>
               </div>
