@@ -68,7 +68,7 @@ export default function DriverDashboard() {
           Driver Dashboard
         </h1>
         <p className="text-gray-600 dark:text-gray-400">
-          Welcome back! Here's your trip overview
+          Welcome back! Here&apos;s your trip overview
         </p>
       </div>
 

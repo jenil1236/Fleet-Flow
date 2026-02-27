@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import StatsCard from '@/components/dashboard/StatsCard';
-import { Truck, Users, DollarSign, Wrench, TrendingUp, Activity } from 'lucide-react';
+import { Truck, DollarSign, Wrench, TrendingUp, Activity } from 'lucide-react';
 
 export default function DashboardPage() {
   const [stats, setStats] = useState(null);
@@ -66,7 +66,7 @@ export default function DashboardPage() {
           Dashboard Overview
         </h1>
         <p className="text-gray-600 dark:text-gray-400">
-          Welcome back! Here's what's happening with your fleet today.
+          Welcome back! Here&apos;s what&apos;s happening with your fleet today.
         </p>
       </div>
 

@@ -188,7 +188,7 @@ export default function CreateUserPage() {
           {/* Info Box */}
           <div className="p-4 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-xl">
             <p className="text-blue-800 dark:text-blue-300 text-sm">
-              <strong>Note:</strong> A secure password will be automatically generated and sent to the user's email address along with login instructions.
+              <strong>Note:</strong> A secure password will be automatically generated and sent to the user&apos;s email address along with login instructions.
             </p>
           </div>
 
