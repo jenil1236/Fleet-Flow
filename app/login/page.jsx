@@ -57,6 +57,17 @@ export default function LoginPage() {
 
   return (
     <AuthLayout subtitle="Sign in to your account">
+      <div className="mb-4">
+        <Link
+          href="/landing"
+          className="inline-flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors"
+        >
+          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+          </svg>
+          Back to Landing
+        </Link>
+      </div>
       <Card>
         <CardHeader>
           <CardTitle>Welcome back</CardTitle>

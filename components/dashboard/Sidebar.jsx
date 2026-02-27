@@ -11,7 +11,9 @@ import {
   Settings, 
   User,
   X,
-  Activity
+  Activity,
+  AlertTriangle,
+  TrendingUp,
 } from 'lucide-react';
 
 const iconMap = {
@@ -24,6 +26,8 @@ const iconMap = {
   Settings,
   User,
   Activity,
+  AlertTriangle,
+  TrendingUp,
 };
 
 const defaultMenuItems = [
@@ -32,6 +36,7 @@ const defaultMenuItems = [
   { icon: 'DollarSign', label: 'Expenses', href: '/dashboard/expenses' },
   { icon: 'Wrench', label: 'Maintenance', href: '/dashboard/maintenance' },
   { icon: 'BarChart3', label: 'Analytics', href: '/dashboard/analytics' },
+  { icon: 'AlertTriangle', label: 'Driver Issues', href: '/dashboard/complaints' },
   { icon: 'Users', label: 'Users', href: '/dashboard/users' },
   { icon: 'Settings', label: 'Settings', href: '/dashboard/settings' },
   { icon: 'User', label: 'Profile', href: '/dashboard/profile' },

@@ -19,7 +19,6 @@ export default function EditDriverPage() {
     licenseExpiry: '',
     dutyStatus: 'OFF_DUTY',
     safetyScore: 100,
-    complaintCount: 0,
   });
 
   useEffect(() => {
@@ -43,7 +42,6 @@ export default function EditDriverPage() {
           licenseExpiry: foundDriver.licenseExpiry ? new Date(foundDriver.licenseExpiry).toISOString().split('T')[0] : '',
           dutyStatus: foundDriver.dutyStatus || 'OFF_DUTY',
           safetyScore: foundDriver.safetyScore || 100,
-          complaintCount: foundDriver.complaintCount || 0,
         });
       }
       setLoading(false);
@@ -67,7 +65,6 @@ export default function EditDriverPage() {
           licenseExpiry: formData.licenseExpiry,
           dutyStatus: formData.dutyStatus,
           safetyScore: Number(formData.safetyScore),
-          complaintCount: Number(formData.complaintCount),
         }),
       });
 
@@ -193,20 +190,6 @@ export default function EditDriverPage() {
               max="100"
               value={formData.safetyScore}
               onChange={(e) => setFormData({ ...formData, safetyScore: e.target.value })}
-              className="w-full px-4 py-2 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
-              required
-            />
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-              Complaint Count
-            </label>
-            <input
-              type="number"
-              min="0"
-              value={formData.complaintCount}
-              onChange={(e) => setFormData({ ...formData, complaintCount: e.target.value })}
               className="w-full px-4 py-2 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
               required
             />

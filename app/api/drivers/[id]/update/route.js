@@ -9,7 +9,6 @@ const updateDriverSchema = z.object({
   licenseExpiry: z.string().optional(), // ISO date string
   dutyStatus: z.enum(['ON_DUTY', 'OFF_DUTY', 'SUSPENDED']).optional(),
   safetyScore: z.number().min(0).max(100).optional(),
-  complaintCount: z.number().min(0).optional(),
 });
 
 // PATCH /api/drivers/:id/update

@@ -9,6 +9,7 @@ const driverMenu = [
   { icon: 'LayoutDashboard', label: 'Dashboard', href: '/dashboard-driver' },
   { icon: 'Activity', label: 'My Trips', href: '/dashboard-driver/trips' },
   { icon: 'Truck', label: 'Vehicle', href: '/dashboard-driver/vehicle' },
+  { icon: 'AlertTriangle', label: 'Report Issues', href: '/dashboard-driver/complaints' },
   { icon: 'User', label: 'Profile', href: '/dashboard/profile' },
 ];
 
