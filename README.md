@@ -23,17 +23,14 @@
 - [Tech Stack](#-tech-stack)
 - [System Architecture](#-system-architecture)
 - [Folder Structure](#-folder-structure)
-- [Authentication Flow](#-authentication-flow)
 - [RBAC System](#-rbac-system)
-- [Email System](#-email-system)
 - [Getting Started](#-getting-started)
 - [Environment Variables](#-environment-variables)
 - [Database Setup](#-database-setup)
 - [API Endpoints](#-api-endpoints)
 - [Role-Based Dashboards](#-role-based-dashboards)
 - [Screenshots](#-screenshots)
-- [Contributing](#-contributing)
-- [License](#-license)
+
 
 ---
 
@@ -289,48 +286,6 @@ fleetflow/
 
 ---
 
-## 🔐 Authentication Flow
-
-```mermaid
-sequenceDiagram
-    participant U as User
-    participant L as Login Page
-    participant API as Login API
-    participant DB as Database
-    participant NA as NextAuth
-    participant M as Middleware
-    participant D as Dashboard
-
-    U->>L: Enter credentials
-    L->>API: POST /api/auth/login
-    API->>DB: Query user by email
-    DB-->>API: User data
-    API->>API: Verify password (bcrypt)
-    alt Password Valid
-        API->>NA: Create session
-        NA-->>API: Session token
-        API-->>L: Success + token
-        L->>D: Redirect to dashboard
-        M->>M: Check session
-        M->>M: Verify role
-        M->>D: Allow access
-    else Password Invalid
-        API-->>L: Error message
-        L->>U: Show error
-    end
-```
-
-### Authentication Features:
-- ✅ Email/Password authentication
-- ✅ Secure password hashing (bcrypt)
-- ✅ JWT-based sessions
-- ✅ Password reset via email
-- ✅ Force password change on first login
-- ✅ Session persistence
-- ✅ Automatic session refresh
-
----
-
 ## 🛡️ RBAC System
 
 ```mermaid
@@ -389,49 +344,7 @@ graph TD
 | Analytics | ✅ (All) | ❌ | ❌ | ✅ (Safety) | ✅ (Financial) |
 | Settings | ✅ | ❌ | ❌ | ❌ | ❌ |
 
----
 
-## 📧 Email System
-
-```mermaid
-sequenceDiagram
-    participant U as User
-    participant FP as Forgot Password Page
-    participant API as API Route
-    participant DB as Database
-    participant ES as Email Service
-    participant SMTP as SMTP Server
-    participant E as User Email
-
-    U->>FP: Enter email
-    FP->>API: POST /api/auth/forgot-password
-    API->>DB: Find user by email
-    DB-->>API: User found
-    API->>API: Generate reset token
-    API->>DB: Save token with expiry
-    API->>ES: Send reset email
-    ES->>SMTP: Connect & authenticate
-    SMTP->>E: Deliver email
-    E-->>U: Receive reset link
-    U->>API: Click reset link
-    API->>DB: Verify token
-    DB-->>API: Token valid
-    API-->>U: Show reset form
-    U->>API: Submit new password
-    API->>DB: Update password
-    API->>DB: Invalidate token
-    API-->>U: Success message
-```
-
-### Email Features:
-- ✅ Password reset emails
-- ✅ Secure token generation
-- ✅ Token expiration (1 hour)
-- ✅ HTML email templates
-- ✅ SMTP configuration
-- ✅ Error handling
-
----
 
 ## 🚀 Getting Started
 
@@ -444,8 +357,8 @@ sequenceDiagram
 
 1. **Clone the repository**
 ```bash
-git clone https://github.com/yourusername/fleetflow.git
-cd fleetflow
+git clone https://github.com/jenil1236/Fleet-Flow.git
+cd Fleet-Flow/fleetflow
 ```
 
 2. **Install dependencies**
@@ -666,60 +579,10 @@ POST   /api/users/create           # Create user
 
 ---
 
-## 📸 Screenshots
-
-### Landing Page
-![Landing Page](docs/screenshots/landing.png)
-
-### Fleet Manager Dashboard
-![Dashboard](docs/screenshots/dashboard.png)
-
-### Vehicle Management
-![Vehicles](docs/screenshots/vehicles.png)
-
-### Analytics
-![Analytics](docs/screenshots/analytics.png)
-
----
-
-## 🤝 Contributing
-
-Contributions are welcome! Please follow these steps:
-
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
-
----
-
-## 📄 License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
----
-
-## 📞 Support
-
-For support, email support@fleetflow.com or open an issue on GitHub.
-
----
-
-## 🙏 Acknowledgments
-
-- Next.js team for the amazing framework
-- Prisma team for the excellent ORM
-- Tailwind CSS for the utility-first CSS framework
-- Recharts for beautiful charts
-- Lucide for the icon library
-
----
-
 <div align="center">
 
 **Built with ❤️ for fleet operators worldwide**
 
-[Website](https://fleetflow.com) • [Documentation](https://docs.fleetflow.com) • [Support](https://support.fleetflow.com)
+[GitHub Repository](https://github.com/jenil1236/Fleet-Flow)
 
 </div>
