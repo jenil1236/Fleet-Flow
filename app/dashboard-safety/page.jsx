@@ -2,9 +2,9 @@
 
 import { useEffect, useState } from 'react';
 import StatsCard from '@/components/dashboard/StatsCard';
-import { Truck, Users, DollarSign, Wrench, TrendingUp, Activity } from 'lucide-react';
+import { Truck, Wrench, AlertTriangle, Activity } from 'lucide-react';
 
-export default function DashboardPage() {
+export default function SafetyOfficerDashboard() {
   const [stats, setStats] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -63,14 +63,14 @@ export default function DashboardPage() {
     <div className="space-y-8">
       <div>
         <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
-          Dashboard Overview
+          Safety Officer Dashboard
         </h1>
         <p className="text-gray-600 dark:text-gray-400">
-          Welcome back! Here's what's happening with your fleet today.
+          Monitor fleet safety and maintenance compliance
         </p>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         <StatsCard
           title="Active Fleet"
           value={stats.activeFleet}
@@ -84,49 +84,36 @@ export default function DashboardPage() {
           color="red"
         />
         <StatsCard
-          title="Pending Cargo"
-          value={stats.pendingCargo}
-          icon={Activity}
-          color="orange"
-        />
-        <StatsCard
           title="Utilization Rate"
           value={`${stats.utilizationRate}%`}
-          icon={TrendingUp}
+          icon={Activity}
           color="green"
         />
         <StatsCard
-          title="Total Fuel Cost"
-          value={`$${stats.totalFuelCost.toLocaleString()}%`}
-          icon={DollarSign}
-          color="purple"
-        />
-        <StatsCard
-          title="Fleet ROI"
-          value={`${stats.fleetROI}%`}
-          icon={TrendingUp}
-          color="cyan"
+          title="Pending Cargo"
+          value={stats.pendingCargo}
+          icon={AlertTriangle}
+          color="orange"
         />
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <div className="bg-white dark:bg-gray-900 rounded-2xl p-6 border border-gray-200 dark:border-gray-800">
-          <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">Total Revenue</h3>
-          <p className="text-3xl font-bold text-green-600 dark:text-green-400">
-            ${stats.totalRevenue.toLocaleString()}
-          </p>
-        </div>
-        <div className="bg-white dark:bg-gray-900 rounded-2xl p-6 border border-gray-200 dark:border-gray-800">
-          <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">Total Expenses</h3>
-          <p className="text-3xl font-bold text-red-600 dark:text-red-400">
-            ${stats.totalExpenses.toLocaleString()}
-          </p>
-        </div>
-        <div className="bg-white dark:bg-gray-900 rounded-2xl p-6 border border-gray-200 dark:border-gray-800">
-          <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">Acquisition Cost</h3>
-          <p className="text-3xl font-bold text-gray-900 dark:text-white">
-            ${stats.totalAcquisitionCost.toLocaleString()}
-          </p>
+      <div className="bg-white dark:bg-gray-900 rounded-2xl p-6 border border-gray-200 dark:border-gray-800">
+        <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-4">
+          Safety Overview
+        </h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div>
+            <p className="text-sm text-gray-600 dark:text-gray-400 mb-2">Vehicles in Shop</p>
+            <p className="text-3xl font-bold text-orange-600 dark:text-orange-400">
+              {stats.maintenanceAlerts}
+            </p>
+          </div>
+          <div>
+            <p className="text-sm text-gray-600 dark:text-gray-400 mb-2">Operational Vehicles</p>
+            <p className="text-3xl font-bold text-green-600 dark:text-green-400">
+              {stats.activeFleet}
+            </p>
+          </div>
         </div>
       </div>
     </div>

@@ -35,6 +35,10 @@ export default auth((req) => {
 
   // Redirect authenticated users away from auth pages to dashboard
   if (session && authPages.includes(pathname)) {
+    // Redirect based on role
+    if (session.user.role === 'SAFETY_OFFICER') {
+      return Response.redirect(new URL('/dashboard-safety', req.url));
+    }
     return Response.redirect(new URL('/dashboard', req.url));
   }
 
