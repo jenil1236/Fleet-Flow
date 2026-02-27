@@ -1,8 +1,9 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import Link from 'next/link';
 import { AreaChart, Area, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from 'recharts';
-import { TrendingUp, DollarSign, Fuel, Wrench } from 'lucide-react';
+import { TrendingUp, DollarSign, Fuel, Wrench, ArrowRight } from 'lucide-react';
 
 export default function AnalyticsPage() {
   const [loading, setLoading] = useState(true);
@@ -73,6 +74,35 @@ export default function AnalyticsPage() {
         <p className="text-gray-600 dark:text-gray-400">
           Comprehensive fleet performance metrics and insights
         </p>
+      </div>
+
+      {/* Quick Links */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <Link 
+          href="/dashboard/analytics/trip-analysis"
+          className="bg-gradient-to-br from-blue-600 to-cyan-500 rounded-2xl p-6 text-white hover:shadow-lg transition-shadow group"
+        >
+          <div className="flex items-center justify-between">
+            <div>
+              <h3 className="text-xl font-bold mb-2">Trip Analysis</h3>
+              <p className="text-blue-100">Detailed trip-level profitability and performance</p>
+            </div>
+            <ArrowRight className="w-6 h-6 group-hover:translate-x-1 transition-transform" />
+          </div>
+        </Link>
+
+        <Link 
+          href="/dashboard/analytics/fleet-summary"
+          className="bg-gradient-to-br from-purple-600 to-pink-500 rounded-2xl p-6 text-white hover:shadow-lg transition-shadow group"
+        >
+          <div className="flex items-center justify-between">
+            <div>
+              <h3 className="text-xl font-bold mb-2">Fleet Summary</h3>
+              <p className="text-purple-100">Fleet-wide cost analysis and vehicle performance</p>
+            </div>
+            <ArrowRight className="w-6 h-6 group-hover:translate-x-1 transition-transform" />
+          </div>
+        </Link>
       </div>
 
       {/* Key Metrics */}

@@ -39,6 +39,15 @@ export default auth((req) => {
     if (session.user.role === 'SAFETY_OFFICER') {
       return Response.redirect(new URL('/dashboard-safety', req.url));
     }
+    if (session.user.role === 'DISPATCHER') {
+      return Response.redirect(new URL('/dashboard-dispatcher', req.url));
+    }
+    if (session.user.role === 'DRIVER') {
+      return Response.redirect(new URL('/dashboard-driver', req.url));
+    }
+    if (session.user.role === 'FINANCIAL_ANALYST') {
+      return Response.redirect(new URL('/dashboard-financial', req.url));
+    }
     return Response.redirect(new URL('/dashboard', req.url));
   }
 

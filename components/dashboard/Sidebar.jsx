@@ -10,7 +10,8 @@ import {
   Users, 
   Settings, 
   User,
-  X
+  X,
+  Activity
 } from 'lucide-react';
 
 const iconMap = {
@@ -22,6 +23,7 @@ const iconMap = {
   Users,
   Settings,
   User,
+  Activity,
 };
 
 const defaultMenuItems = [
