@@ -23,17 +23,14 @@
 - [Tech Stack](#-tech-stack)
 - [System Architecture](#-system-architecture)
 - [Folder Structure](#-folder-structure)
-- [Authentication Flow](#-authentication-flow)
 - [RBAC System](#-rbac-system)
-- [Email System](#-email-system)
 - [Getting Started](#-getting-started)
 - [Environment Variables](#-environment-variables)
 - [Database Setup](#-database-setup)
 - [API Endpoints](#-api-endpoints)
 - [Role-Based Dashboards](#-role-based-dashboards)
 - [Screenshots](#-screenshots)
-- [Contributing](#-contributing)
-- [License](#-license)
+
 
 ---
 
@@ -286,65 +283,6 @@ fleetflow/
 | `prisma/schema.prisma` | Database schema with all models and relationships |
 | `app/api/auth/login/route.js` | Custom login endpoint with credential validation |
 | `components/dashboard/Sidebar.jsx` | Dynamic sidebar with role-based menu items |
-
----
-
-## 🔐 Authentication & Email Flow
-
-```mermaid
-graph TB
-    subgraph "User Actions"
-        A[Login Request]
-        B[Password Reset Request]
-    end
-    
-    subgraph "API Layer"
-        C["POST /api/auth/login"]
-        D["POST /api/auth/forgot-password"]
-        E["POST /api/auth/reset-password"]
-    end
-    
-    subgraph "Services"
-        F[NextAuth v5]
-        G[Email Service]
-        H[bcrypt]
-    end
-    
-    subgraph "Data Layer"
-        I[PostgreSQL Database]
-    end
-    
-    subgraph "Access Control"
-        J[Middleware]
-        K[RBAC Check]
-    end
-    
-    L[Dashboard]
-    M[User Inbox]
-    
-    A --> C
-    C --> H
-    H --> I
-    C --> F
-    F --> J
-    J --> K
-    K --> L
-    
-    B --> D
-    D --> I
-    D --> G
-    G -.->|Email| M
-    M --> E
-    E --> I
-```
-
-### Key Features:
-- ✅ Email/Password authentication with bcrypt hashing
-- ✅ JWT-based sessions via NextAuth v5
-- ✅ Password reset via email (1-hour token expiry)
-- ✅ Force password change on first login
-- ✅ Role-based access control (RBAC)
-- ✅ Session persistence & auto-refresh
 
 ---
 
