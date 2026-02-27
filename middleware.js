@@ -9,22 +9,34 @@ export default auth((req) => {
   // Public routes that don't require authentication
   const publicRoutes = [
     '/login',
+    '/register',
+    '/forgot-password',
+    '/reset-password',
+    '/landing',
     '/api/auth/signin',
     '/api/auth/callback',
     '/api/auth/session',
     '/api/auth/providers',
     '/api/auth/csrf',
     '/api/auth/register',
+    '/api/auth/login',
     '/api/auth/logout',
     '/api/auth/signout',
     '/api/auth/forgot-password',
     '/api/auth/reset-password',
-    '/reset-password',
     '/reset-password-required',
   ];
 
+  // Auth pages that should redirect to dashboard if already logged in
+  const authPages = ['/login', '/register', '/forgot-password','/reset-password', '/landing', '/'];
+
   // Check if current path is public
   const isPublicRoute = publicRoutes.some((route) => pathname.startsWith(route));
+
+  // Redirect authenticated users away from auth pages to dashboard
+  if (session && authPages.includes(pathname)) {
+    return Response.redirect(new URL('/dashboard', req.url));
+  }
 
   // Allow access to public routes
   if (isPublicRoute) {
@@ -55,7 +67,7 @@ export default auth((req) => {
 
 // Configure which routes the middleware should run on
 export const config = {
-  runtime: 'nodejs', // This is the magic switch
+  runtime: 'nodejs',
   matcher: [
     /*
      * Match all request paths except:

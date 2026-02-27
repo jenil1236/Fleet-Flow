@@ -41,7 +41,7 @@ export async function POST(request) {
       const hashedToken = hashToken(resetToken);
       
       // Set expiry to 10 min from now
-      const expiresAt = new Date(Date.now() + 5 * 1000); // 10 min
+      const expiresAt = new Date(Date.now() + 6*60*60 * 1000); // 10 min
 
       // Save hashed token and expiry to database
       await db.user.update({
